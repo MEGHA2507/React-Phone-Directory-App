@@ -1,0 +1,39 @@
+.add-directory-conatiner{
+    padding: 20px;
+}
+.add-btn{
+    padding: 10px 15px;
+    background: green;
+    color: #fff;
+    margin-top: 20px;
+    border: 0;
+    text-transform: uppercase;
+    margin-bottom: 30px;
+}
+
+.table-header{
+    display: flex;
+    flex-direction: row;
+    align-items: baseline;
+   
+}
+
+.label{
+    
+    text-transform: uppercase;
+    width: 33%;
+}
+
+.h-label{
+    font-weight: 700;
+}
+
+.delete-btn{
+    padding: 10px 15px;
+    background: pink;
+    color: #00;
+    margin-top: 20px;
+    border: 0;
+    text-transform: uppercase;
+    
+}
