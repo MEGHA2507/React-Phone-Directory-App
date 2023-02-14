@@ -5,6 +5,7 @@ import React, {
   useEffect,
   useCallback,
   useMemo,
+  useReducer,
 } from "react";
 import AddSubscribers from "./AddSubscribers";
 import ShowSubscribers from "./ShowSubscribers";
@@ -12,6 +13,7 @@ import ShowSubscribers from "./ShowSubscribers";
 import { Routes, Route } from "react-router-dom";
 import Footer from "./Footer";
 import { SubscriberCountContext } from "./SubscriberCountContext";
+import { TotalSubscriberReducer } from "./TotalSubscriberReducer";
 
 export default function PhoneDirectory() {
   const [subscribersList, setSubscriberList] = useState([]);
@@ -26,9 +28,12 @@ export default function PhoneDirectory() {
   //     .then((list) => setSubscriberList(list));
   // }
 
+  const [state, dispatch] = useReducer(TotalSubscriberReducer, { count: 0 });
+
   async function loadData() {
     const response = await fetch("http://localhost:7081/contacts");
     const data = await response.json();
+    dispatch({ type: "UPDATE_COUNT", payload: data.length });
     setSubscriberList(data);
   }
 
@@ -77,13 +82,14 @@ export default function PhoneDirectory() {
       }
     );
     const data = await response.json();
+    console.log(data);
 
     loadData();
   }, []);
 
-  const numberOfSubscriptions = useMemo(() => {
-    return subscribersList.length;
-  }, [subscribersList]);
+  // const numberOfSubscriptions = useMemo(() => {
+  //   return subscribersList.length;
+  // }, [subscribersList]);
 
   async function addSubscriber(newSubscriber) {
     // let subscriberList = subscribersList;
@@ -108,7 +114,7 @@ export default function PhoneDirectory() {
     });
 
     const data = await response.json();
-
+    console.log(data);
     loadData();
   }
 
@@ -140,7 +146,10 @@ export default function PhoneDirectory() {
           }
         ></Route>
       </Routes>
-      <SubscriberCountContext.Provider value={numberOfSubscriptions}>
+      {/* <SubscriberCountContext.Provider value={numberOfSubscriptions}>
+        <Footer></Footer>
+      </SubscriberCountContext.Provider> */}
+      <SubscriberCountContext.Provider value={state.count}>
         <Footer></Footer>
       </SubscriberCountContext.Provider>
     </Fragment>
