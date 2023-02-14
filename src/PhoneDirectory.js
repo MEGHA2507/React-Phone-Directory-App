@@ -1,44 +1,93 @@
 // import React, { Component } from "react";
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useState, useEffect } from "react";
 import AddSubscribers from "./AddSubscribers";
 import ShowSubscribers from "./ShowSubscribers";
 // import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { Routes, Route } from "react-router-dom";
 import Footer from "./Footer";
-import {SubscriberCountContext} from "./SubscriberCountContext";
+import { SubscriberCountContext } from "./SubscriberCountContext";
 
 export default function PhoneDirectory() {
-  const [subscribersList, setSubscriberList] = useState([
-    { id: 1, name: "Megha Banerjee", phone: "99999999999" },
-    { id: 2, name: "Medha Banerjee", phone: "99673847799" },
-  ]);
+  const [subscribersList, setSubscriberList] = useState([]);
+  //   [
+  //   { id: 1, name: "Megha Banerjee", phone: "99999999999" },
+  //   { id: 2, name: "Medha Banerjee", phone: "99673847799" },
+  // ]
 
-  function deleteSubscriberHandler(subscriberID) {
-    const newSubscribers = subscribersList.filter(
-      (sub) => sub.id !== subscriberID
-    );
-    // in react always use filter to remove the element , splice updates the initial array due to which inital array also updates ,
-    // React checks with Object.is() to see if 2 arrays are equal or not
-    // newSubscribers.splice(subscriberIndex, 1);
-    // this.setState({ subscribers: newSubscribers });
+  // function loadData() {
+  //   fetch("http://localhost:7081/contacts")
+  //     .then((input) => input.json())
+  //     .then((list) => setSubscriberList(list));
+  // }
 
-    setSubscriberList(newSubscribers);
-    console.log(newSubscribers);
+  async function loadData() {
+    const response = await fetch("http://localhost:7081/contacts");
+    const data = await response.json();
+    setSubscriberList(data);
   }
 
-  function addSubscriber(newSubscriber) {
-    let subscriberList = subscribersList;
-    if (subscriberList.length > 0) {
-      newSubscriber.id = subscriberList[subscriberList.length - 1].id + 1;
-    } else {
-      newSubscriber.id = 1;
-    }
+  useEffect(() => {
+    console.log(loadData());
+  }, []);
 
-    subscriberList.push(newSubscriber);
-    // this.setState({ subscriberList: subscriberList });
-    setSubscriberList(subscriberList);
+  // function deleteSubscriberHandler(subscriberID) {
+  //   // const newSubscribers = subscribersList.filter(
+  //   //   (sub) => sub.id !== subscriberID
+  //   // );
+  //   // in react always use filter to remove the element , splice updates the initial array due to which inital array also updates ,
+  //   // React checks with Object.is() to see if 2 arrays are equal or not
+  //   // newSubscribers.splice(subscriberIndex, 1);
+  //   // this.setState({ subscribers: newSubscribers });
 
-    console.log(subscriberList);
+  //   // setSubscriberList(newSubscribers);
+  //   // console.log(newSubscribers);
+
+  //   fetch("http://localhost:7081/api/contacts/" + subscriberID, {
+  //     method: "DELETE",
+  //   })
+  //     .then((input) => input.json())
+  //     .then((data) => {
+  //       loadData();
+  //     });
+  // }
+
+  async function deleteSubscriberHandler(subscriberID) {
+    const response = await fetch(
+      "http://localhost:7081/api/contacts/" + subscriberID,
+      {
+        method: "DELETE",
+      }
+    );
+    const data = await response.json();
+
+    loadData();
+  }
+
+  async function addSubscriber(newSubscriber) {
+    // let subscriberList = subscribersList;
+    // if (subscriberList.length > 0) {
+    //   newSubscriber.id = subscriberList[subscriberList.length - 1].id + 1;
+    // } else {
+    //   newSubscriber.id = 1;
+    // }
+
+    // subscriberList.push(newSubscriber);
+    // // this.setState({ subscriberList: subscriberList });
+    // setSubscriberList(subscriberList);
+
+    // console.log(subscriberList);
+
+    const response = await fetch("http://localhost:7081/api/contacts/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(newSubscriber),
+    });
+
+    const data = await response.json();
+
+    loadData();
   }
 
   return (

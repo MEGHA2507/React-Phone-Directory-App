@@ -1,4 +1,4 @@
-import React, { Component, useEffect } from "react";
+import React, { useEffect } from "react";
 import Header from "./Header";
 import "./ShowSubscribers.css";
 import { Link } from "react-router-dom";
