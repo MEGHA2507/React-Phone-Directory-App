@@ -1,9 +1,11 @@
 // import React, { Component } from "react";
-import React, { useState } from "react";
+import React, { Fragment, useState } from "react";
 import AddSubscribers from "./AddSubscribers";
 import ShowSubscribers from "./ShowSubscribers";
 // import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { Routes, Route } from "react-router-dom";
+import Footer from "./Footer";
+import {SubscriberCountContext} from "./SubscriberCountContext";
 
 export default function PhoneDirectory() {
   const [subscribersList, setSubscriberList] = useState([
@@ -40,32 +42,37 @@ export default function PhoneDirectory() {
   }
 
   return (
-    <Routes>
-      <Route
-        exact
-        path="/"
-        element={
-          <ShowSubscribers
-            subscriberList={subscribersList}
-            deleteSubscriberHandler={(subscriberId) =>
-              deleteSubscriberHandler(subscriberId)
-            }
-          />
-        }
-      ></Route>
+    <Fragment>
+      <Routes>
+        <Route
+          exact
+          path="/"
+          element={
+            <ShowSubscribers
+              subscriberList={subscribersList}
+              deleteSubscriberHandler={(subscriberId) =>
+                deleteSubscriberHandler(subscriberId)
+              }
+            />
+          }
+        ></Route>
 
-      <Route
-        exact
-        path="/add"
-        element={
-          <AddSubscribers
-            addSubscriberHandler={(newSubscriber) =>
-              addSubscriber(newSubscriber)
-            }
-          />
-        }
-      ></Route>
-    </Routes>
+        <Route
+          exact
+          path="/add"
+          element={
+            <AddSubscribers
+              addSubscriberHandler={(newSubscriber) =>
+                addSubscriber(newSubscriber)
+              }
+            />
+          }
+        ></Route>
+      </Routes>
+      <SubscriberCountContext.Provider value={subscribersList.length}>
+        <Footer></Footer>
+      </SubscriberCountContext.Provider>
+    </Fragment>
   );
 }
 
