@@ -1,7 +1,8 @@
-import React, { Component, useState } from "react";
+import React, { useState } from "react";
 import Header from "./Header";
 import "./AddSubscibers.css";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { ValidatorForm, TextValidator } from "react-material-ui-form-validator";
 
 export default function AddSubscribers({ addSubscriberHandler }) {
   const [addSubscriberForm, setAddSubsciberForm] = useState({
@@ -10,6 +11,9 @@ export default function AddSubscribers({ addSubscriberHandler }) {
     phone: "",
   });
 
+  //const history = useHistory();
+  const navigate = useNavigate();
+
   const { name, phone } = addSubscriberForm;
 
   function inputChangehandler(e) {
@@ -17,17 +21,22 @@ export default function AddSubscribers({ addSubscriberHandler }) {
     console.log(state);
 
     state[e.target.name] = e.target.value;
-    setAddSubsciberForm({
-      id: state["id"],
-      name: state["name"],
-      phone: state["phone"],
-    });
+    setAddSubsciberForm({ ...state }); // we need to spread as react needs a new variable/ object.
+    // setAddSubsciberForm({ ...addSubscriberForm, ...state });
+    // setAddSubsciberForm({
+    //   id: state["id"],
+    //   name: state["name"],
+    //   phone: state["phone"],
+    // });
   }
 
   function onFormSubmitted(e) {
     e.preventDefault();
     addSubscriberHandler(addSubscriberForm);
     setAddSubsciberForm({ id: 0, name: "", phone: "" });
+    //history.push("/");
+    // history.goBack();
+    navigate("/");
   }
 
   return (
@@ -38,8 +47,19 @@ export default function AddSubscribers({ addSubscriberHandler }) {
           <button className="custom-btn bck-btn">Back</button>
         </Link>
 
-        <form className="subscriber-form" onSubmit={onFormSubmitted}>
-          <label htmlFor="name" className="label-control">
+        <ValidatorForm className="subscriber-form" onSubmit={onFormSubmitted}>
+          <TextValidator
+            id="name"
+            type="text"
+            label="Enter Name "
+            className="input-control"
+            name="name"
+            value={name}
+            onChange={inputChangehandler}
+            validators={["required"]}
+            errorMessages={["Name is required"]}
+          ></TextValidator>
+          {/* <label htmlFor="name" className="label-control">
             Name:{" "}
           </label>
           <br />
@@ -49,11 +69,23 @@ export default function AddSubscribers({ addSubscriberHandler }) {
             className="input-control"
             name="name"
             onChange={inputChangehandler}
-          ></input>
+          ></input> */}
           <br />
           <br />
 
-          <label htmlFor="phone" className="label-control">
+          <TextValidator
+            id="phone"
+            type="text"
+            className="input-control"
+            name="phone"
+            onChange={inputChangehandler}
+            label="Enter Phone "
+            value={phone}
+            validators={["required"]}
+            errorMessages={["Phone is required"]}
+          ></TextValidator>
+
+          {/* <label htmlFor="phone" className="label-control">
             Phone:{" "}
           </label>
           <br />
@@ -63,7 +95,7 @@ export default function AddSubscribers({ addSubscriberHandler }) {
             className="input-control"
             name="phone"
             onChange={inputChangehandler}
-          ></input>
+          ></input> */}
           <br />
           <br />
 
@@ -80,7 +112,7 @@ export default function AddSubscribers({ addSubscriberHandler }) {
           <button type="submit" className="custom-btn add-btn">
             Add
           </button>
-        </form>
+        </ValidatorForm>
       </div>
     </div>
   );
