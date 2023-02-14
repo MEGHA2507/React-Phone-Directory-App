@@ -1,5 +1,11 @@
 // import React, { Component } from "react";
-import React, { Fragment, useState, useEffect } from "react";
+import React, {
+  Fragment,
+  useState,
+  useEffect,
+  useCallback,
+  useMemo,
+} from "react";
 import AddSubscribers from "./AddSubscribers";
 import ShowSubscribers from "./ShowSubscribers";
 // import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
@@ -51,7 +57,19 @@ export default function PhoneDirectory() {
   //     });
   // }
 
-  async function deleteSubscriberHandler(subscriberID) {
+  // async function deleteSubscriberHandler(subscriberID) {
+  //   const response = await fetch(
+  //     "http://localhost:7081/api/contacts/" + subscriberID,
+  //     {
+  //       method: "DELETE",
+  //     }
+  //   );
+  //   const data = await response.json();
+
+  //   loadData();
+  // }
+
+  const deleteSubscriberHandler = useCallback(async (subscriberID) => {
     const response = await fetch(
       "http://localhost:7081/api/contacts/" + subscriberID,
       {
@@ -61,7 +79,11 @@ export default function PhoneDirectory() {
     const data = await response.json();
 
     loadData();
-  }
+  }, []);
+
+  const numberOfSubscriptions = useMemo(() => {
+    return subscribersList.length;
+  }, [subscribersList]);
 
   async function addSubscriber(newSubscriber) {
     // let subscriberList = subscribersList;
@@ -118,7 +140,7 @@ export default function PhoneDirectory() {
           }
         ></Route>
       </Routes>
-      <SubscriberCountContext.Provider value={subscribersList.length}>
+      <SubscriberCountContext.Provider value={numberOfSubscriptions}>
         <Footer></Footer>
       </SubscriberCountContext.Provider>
     </Fragment>
