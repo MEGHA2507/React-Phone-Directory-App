@@ -2,11 +2,11 @@ import React, { useEffect } from "react";
 import Header from "./Header";
 import "./ShowSubscribers.css";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
 
-export default function ShowSubscribers({
-  subscriberList,
-  deleteSubscriberHandler,
-}) {
+export default function ShowSubscribers({ deleteSubscriberHandler }) {
+  const subscriberList = useSelector((state) => state.subscribers);
+
   useEffect(() => {
     if (subscriberList && subscriberList.length) {
       document.title =

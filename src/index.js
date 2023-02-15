@@ -6,12 +6,16 @@ import './index.css';
 import reportWebVitals from "./reportWebVitals";
 import PhoneDirectory from "./PhoneDirectory";
 import { BrowserRouter } from "react-router-dom";
+import { Provider } from "react-redux";
+import store from "./subscriber-store";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
     <BrowserRouter>
-      <PhoneDirectory />
+      <Provider store={store}>
+        <PhoneDirectory />
+      </Provider>
     </BrowserRouter>
     {/* <App /> */}
     {/* <AddSubscribers /> */}
