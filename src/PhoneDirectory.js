@@ -4,8 +4,8 @@ import React, {
   useState,
   useEffect,
   useCallback,
-  useMemo,
-  useReducer,
+ // useMemo,
+ // useReducer,
 } from "react";
 import AddSubscribers from "./AddSubscribers";
 import ShowSubscribers from "./ShowSubscribers";
@@ -13,7 +13,7 @@ import ShowSubscribers from "./ShowSubscribers";
 import { Routes, Route } from "react-router-dom";
 import Footer from "./Footer";
 import { SubscriberCountContext } from "./SubscriberCountContext";
-import { TotalSubscriberReducer } from "./TotalSubscriberReducer";
+//import { TotalSubscriberReducer } from "./TotalSubscriberReducer";
 import { useDispatch } from "react-redux";
 
 export default function PhoneDirectory() {
